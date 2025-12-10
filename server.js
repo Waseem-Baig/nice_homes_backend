@@ -42,6 +42,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:8080",
   "https://nicehomesdevelopers.com",
+  "https://www.nicehomesdevelopers.com",
   "https://nice-homes.vercel.app",
 ].filter(Boolean);
 
