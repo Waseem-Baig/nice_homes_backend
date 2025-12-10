@@ -13,6 +13,8 @@ import contactRoutes from "./routes/contactRoutes.js";
 import testimonialRoutes from "./routes/testimonialRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import projectEnquiryRoutes from "./routes/projectEnquiryRoutes.js";
+import visitorLeadRoutes from "./routes/visitorLeadRoutes.js";
+import propertyViewRoutes from "./routes/propertyViewRoutes.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -35,9 +37,26 @@ app.use(cookieParser());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // CORS configuration
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+  "http://localhost:8080",
+  "https://nicehomesdevelopers.com",
+  "https://golden-legacy-homes.vercel.app",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -53,6 +72,8 @@ app.use("/api/contacts", contactRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/project-enquiries", projectEnquiryRoutes);
+app.use("/api/visitor-leads", visitorLeadRoutes);
+app.use("/api/property-views", propertyViewRoutes);
 
 // Health check route
 app.get("/api/health", (req, res) => {
