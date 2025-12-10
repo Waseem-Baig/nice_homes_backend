@@ -42,7 +42,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:8080",
   "https://nicehomesdevelopers.com",
-  "https://golden-legacy-homes.vercel.app",
+  "https://nice-homes.vercel.app",
 ].filter(Boolean);
 
 app.use(
